@@ -72,17 +72,17 @@
 
 	if((!motor_enable_buf) && (input_pos != current_pos) && ( tim_state > TIM_COMPARE) && ( tim_state < time_levels[0]))
 	{																	  
-		if(input_pos>current_pos)	direction = 1;		// pozitiv  // irány meghatározás
-		else 						direction = 0;		// negatív
+		if(input_pos>current_pos)	direction = 1;		// positive  // detect direction
+		else 						direction = 0;		// negative
 
-		motor_enable = 1;											// engedélyezés 
+		motor_enable = 1;											// enable 
 		PORT_Write(&MOTOR_1_DIR_PORT,MOTOR_1_DIR_PIN,direction);	
-		enable_timer_1_out();										// PWM kimenet engedélyezése
+		enable_timer_1_out();										// enable pwm
 				
 	}else if((!motor_enable_buf) && ( tim_state > TIM_COMPARE) && ( tim_state < time_levels[0]) )		
 	{	  
-		disable_timer_1_out();										// PWM leválasztása					
-		PORT_Write(&MOTOR_1_PULSE_PORT,MOTOR_1_PULSE_PIN,0);		// kimenet 0 ra állítása
+		disable_timer_1_out();										// disable pwm					
+		PORT_Write(&MOTOR_1_PULSE_PORT,MOTOR_1_PULSE_PIN,0);		// reset output
 	}
  }
 

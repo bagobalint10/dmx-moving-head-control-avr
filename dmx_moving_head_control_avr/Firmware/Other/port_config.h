@@ -10,7 +10,7 @@
 
 	#include <avr/io.h>
 
-	// port config shift registerhez
+	// port config for shift registers
 
 	#define SR_LATCH_PORT PORTD		// --> D6
 	#define SR_LATCH_PIN PORTD6
@@ -24,7 +24,7 @@
 	#define SR_CLOCK_PIN PORTD5
 	#define SR_CLOCK_DIR DDRD
 
-	/*	  pinout shift register 
+	/* pin-out for shift registers 
   
 	data	-		d0x80 -> d7
 	clock	-		d0x20 -> d5
@@ -32,12 +32,12 @@
 
 	*/
 
-	// port config a gombokhoz 
+	// port config for buttons
 
 	#define BTN_UP_PORT PORTC		// --> C0  
 	#define BTN_UP_PIN PORTC0
 	#define BTN_UP_DIR DDRC
-	#define BTN_UP_PIN_IN PINC		// bemenet olvasáshoz 
+	#define BTN_UP_PIN_IN PINC
 
 	#define BTN_DOWN_PORT PORTC		// --> C1
 	#define BTN_DOWN_PIN PORTC1
@@ -54,10 +54,10 @@
 	#define BTN_MODE_DIR DDRC
 	#define BTN_MODE_PIN_IN PINC
 	
-	#define BTN_COMMON_PIN_IN PINC	// csak ha az összes gomb  egy porton van 	
+	#define BTN_COMMON_PIN_IN PINC	// if all buttons are on same port 	
 
 	/*
-			gomb bekotes:	 (egy port ra a pinchange miatt majd)
+			buttons pin-out:
 
 							Up 		- 	A0 - PC0 - 0x01 	
 							Down 	- 	A1 - PC1 - 0x02
@@ -65,13 +65,13 @@
 							Mode 	- 	A3 - PC3 - 0x08
 	*/
 
-	// interruptok 
+	// interrupts 
 
 	#define PCINT_B 0
 	#define PCINT_C 1
 	#define PCINT_D 2
 
-	// pcint valid mask --> amiket használhatok 
+	// pcint mask for used pins 
 
 	#define PCMSK0_VALID_MASK  0b00111111  // PB0–PB5
 	#define PCMSK1_VALID_MASK  0b00111111  // PC0–PC5
@@ -83,14 +83,14 @@
 	#define TIMER1 1
 	#define TIMER2 2
 
-	// Timer0 módok (TCCR0A értékek)
+	// Timer0 modes (TCCR0A value)
 
-	#define TIMER0_NORMAL        0x00						// WGM01:0 = 00
-	#define TIMER0_PWM_PC        (1<<WGM00)					// Phase Correct PWM, WGM01:0 = 01
-	#define TIMER0_CTC           (1<<WGM01)					// CTC, WGM01:0 = 10
-	#define TIMER0_PWM_FAST      ((1<<WGM01)|(1<<WGM00))	// Fast PWM, WGM01:0 = 11
+	#define TIMER0_NORMAL        0x00
+	#define TIMER0_PWM_PC        (1<<WGM00)
+	#define TIMER0_CTC           (1<<WGM01)
+	#define TIMER0_PWM_FAST      ((1<<WGM01)|(1<<WGM00))
 
-	// Prescaler beállítások (TCCR0B CS02:0 értékek)
+	// Prescaler settings (TCCR0B CS02:0 value)
 
 	#define TIMER0_NO_CLK        0x00
 	#define TIMER0_PRESCALE_1    (1<<CS00)
@@ -99,14 +99,14 @@
 	#define TIMER0_PRESCALE_256  (1<<CS02)
 	#define TIMER0_PRESCALE_1024 ((1<<CS02)|(1<<CS00))
 
-	// Interrupt típusok
+	// Interrupt types
 
 	#define TIMER0_INT_NONE      0
 	#define TIMER0_INT_OVF       (1<<TOIE0)
 	#define TIMER0_INT_COMP_A    (1<<OCIE0A)
 
 
-	// logic
+	// i/o values
 
 	#define OUTPUT 1
 	#define INPUT 0
@@ -117,25 +117,25 @@
 	#define EEPR_ADR_DMX_ARD_0 0x02
 	#define EEPR_ADR_DMX_ADR_1 0x03
 
-	// relé 
+	// relay
 
-	#define RELAY_PORT PORTB		// --> 9 LÁB -- PB1
+	#define RELAY_PORT PORTB		//  PB1	 - pin 9
 	#define RELAY_PIN PORTB1
 	#define RELAY_DIR DDRB
 
-	 //globális változók
+	 // global variables
 
 	 extern uint8_t *dmx_adress_pointer;
 	 extern uint8_t dmx_array[512];
 
-	 // dmx config változók 
+	 // dmx config values 
 
 	 #define DMX_RESET_TIME 15	
 	 #define DMX_SEND_TIME 5
 	 #define DMX_START_ADRESS 0
 	 #define DMX_MAX_ADRESS 15
 
-	 // motor speed control 
+	 // motor speed control defines
 
 	 #define ARRAY_ELEMENT 300 
 	 #define ARRAY_ELEMENT_1 300

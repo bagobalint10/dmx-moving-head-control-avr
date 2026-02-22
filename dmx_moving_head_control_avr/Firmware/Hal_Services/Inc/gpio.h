@@ -14,6 +14,6 @@
 	void PORT_Init(volatile uint8_t *dir, uint8_t pin, uint8_t state );
 	void PORT_Write(volatile uint8_t *port, uint8_t pin, uint8_t state );
 	void PORT_Toggle(volatile uint8_t *port, uint8_t pin);
-	uint8_t PORT_Read(volatile uint8_t *port);	  // teljes port ot olvas be 
+	uint8_t PORT_Read(volatile uint8_t *port);
 
 #endif /* GPIO_H_ */

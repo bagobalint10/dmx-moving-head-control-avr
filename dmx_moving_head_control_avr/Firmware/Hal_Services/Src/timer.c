@@ -18,11 +18,11 @@
 	switch (timer)
 	{
 		case 0:
-					TCCR0A = 0;				// 1. Alaphelyzet
+					TCCR0A = 0;
 					TCCR0B = 0;
 
-					TCCR0A = t_mode;		// 2. Timer mód beállítása
-					TCCR0B = prescaler;		// 3. Prescaler beállítása
+					TCCR0A = t_mode;
+					TCCR0B = prescaler;
 					break;
 		case 1:		break;
 
@@ -49,14 +49,14 @@
  {
 	timer_init(TIMER0, TIMER0_CTC, TIMER0_PRESCALE_64);
 	timer_int_init(TIMER0, TIMER0_INT_COMP_A);
-	timer_set_value(TIMER0, 249);							// 1ms idõzítés (sys tick)
+	timer_set_value(TIMER0, 249);							// 1ms timing (sys tick)
 	set_timer_int_Callback(TIMER0,timer_0_callback);
  }
 
  uint32_t millis(void)
  {
 	uint32_t m;
-	cli();				// megszakítás tiltás olvasás idejére --> több órajel kiolvasni 32 bitet
+	cli();
 	m = Millis;
 	sei();
 
@@ -65,17 +65,17 @@
 
  void timer_1_init(void)
  {
-	TCCR1A = 0;					// biztonsági 0 - ázás
+	TCCR1A = 0;
 	TCCR1B = 0;
 
 	TCCR1A |= (1 << WGM11);																
 	TCCR1B |= (1 << WGM13) | (1 << WGM12) | (0 << CS12) | (1 << CS11) | (0 << CS10);	
-	TIMSK1 |= (1 << TOIE1);		// ctc- ovf interrupt
+	TIMSK1 |= (1 << TOIE1);		// ctc - ovf interrupt
 
-	OCR1A = TIM_COMPARE;		// kitöltés	beállítása
-	ICR1 = TIM_START_VALUE;		// alap frekvencia beállítása
+	OCR1A = TIM_COMPARE;		// set duty cycle
+	ICR1 = TIM_START_VALUE;		// set start frequency
 
-	sei();						// globális int engedélyezés
+	sei();
  }
 
  void set_timer_1_ovf_value(uint64_t ovf_value)
@@ -85,16 +85,16 @@
 
  uint16_t get_timer_1_value(void)
  {
-	return ((uint16_t)(TCNT1H << 8)) | ((uint16_t) TCNT1L);		// kiolvasni a timer értékét
+	return ((uint16_t)(TCNT1H << 8)) | ((uint16_t) TCNT1L);		// read a timer value
  }
 
  void enable_timer_1_out(void)
  {
-	TCCR1A |= (1 << COM1A1) | (0 << COM1A0);					// PWM kimenet engedélyezése
+	TCCR1A |= (1 << COM1A1) | (0 << COM1A0);					// enable PWM output
  }
 
  void disable_timer_1_out(void)
  {
-	TCCR1A &= ~((1 << COM1A1) | (1 << COM1A0));					// PWM leválasztása
+	TCCR1A &= ~((1 << COM1A1) | (1 << COM1A0));					// disable PWM output
  }
 

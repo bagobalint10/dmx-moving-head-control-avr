@@ -19,14 +19,14 @@
 
  static int dmx_adress = 0x01;
 
- // gomb változók 
+ // button variables
 
  static uint8_t bt_up = 1;
  static uint8_t bt_down = 1;
  static uint8_t bt_enter = 1;
  static uint8_t bt_mode = 1;
 
- //lcd változók
+ // lcd variables
 
  static uint8_t lcd_buffer[4] = "abcd";
  static uint8_t lcd_dot_buffer[4] = {0,0,0,0};
@@ -51,27 +51,26 @@
 												" off",
 												"    "};
 
-	const char *menu_pointer;	// string_push hoz
+	const char *menu_pointer;	// for string_push()
 
-	if(sub_menu_f) menu_pointer = sub_menu_string[sub_menu_n];  			// SUBMENU	KIJELZÉS  
-	else menu_pointer = menu_string[menu_n];								// sima MENU KIJELZÉS
-	if(menu_n == 1) menu_pointer = menu_string[1];							// dmx módba fix!!
-	if((menu_n == 1) && dmx_menu_blink) menu_pointer = sub_menu_string[2];	// dmx módba VILLOG (üres)
+	if(sub_menu_f) menu_pointer = sub_menu_string[sub_menu_n];  
+	else menu_pointer = menu_string[menu_n];	
+	if(menu_n == 1) menu_pointer = menu_string[1];		
+	if((menu_n == 1) && dmx_menu_blink) menu_pointer = sub_menu_string[2];	
 
-	for (int i = 0; i<4; i++)					//str_copy
+	for (int i = 0; i<4; i++)
 	{
 		lcd_buffer[i] = *(menu_pointer+i);
 	}
 
-	if(menu_n == 1)								// dmx adress kijelzése 
+	if(menu_n == 1)	
 	{
-		// adress convert string
 		char s_adress[3];
 
-		s_adress[2] = (dmx_adress%10)+48;		// egyes helyiertek
+		s_adress[2] = (dmx_adress%10)+48;	
 		s_adress[1] = (dmx_adress/10%10)+48;
 		s_adress[0] = (dmx_adress/100%10)+48;
-		//adresss kijelzés 					
+				
 		for (int i = 1; i<4; i++)				// str_copy 1-3
 		{
 			lcd_buffer[i] = s_adress[i-1];
@@ -84,28 +83,28 @@
 	static uint32_t current_time = 0;
 	current_time = millis();
 	static uint32_t prev_time_long = 0;
-	static uint16_t interval_long = 1000;		// hosszú gombnyomás ideje 
+	static uint16_t interval_long = 1000;		// long button press time
 	
 	static uint32_t prev_time_counter = 0;
-	static uint16_t interval_counter = 50;  	// gyors léptetés sebessége (ideje)
+	static uint16_t interval_counter = 50;  	// fast counting time
 
 	static uint32_t prev_time_blink = 0;
-	static uint16_t interval_blink = 350;  		// A betu villogás ideje 
+	static uint16_t interval_blink = 350;  		// letter "A" blink time
 
 	static uint32_t prev_time_save = 0;
-	static uint16_t interval_save = 100;  		// mentésnél villogás ideje 
+	static uint16_t interval_save = 100;  		// save blink time
 
 	static uint32_t prev_time_heat_blink = 0;
-	static uint16_t interval_heat_blink = 100;  // heat dots animacio
+	static uint16_t interval_heat_blink = 100;  // heat dots animation
 
 	static uint32_t prev_time_lamp_cold = 0;
-	static uint32_t interval_lamp_cold = 300000;// kihûlési idõ 5 perc  5*60*1000
+	static uint32_t interval_lamp_cold = 300000;// cool down time - 5 min  5*60*1000
 
 
 	static uint8_t heat_dots = 0x02;
 	static uint8_t heat_dots_dir = 0x01; 
 
-	// felfutó él olvasás
+	// rising edge detection
 	static uint8_t bt_up_tmp = 1;
 	static uint8_t bt_down_tmp = 1;
 	static uint8_t bt_enter_tmp = 1;
@@ -128,7 +127,7 @@
 	
 	
 
-	//---------> éldetektálás
+	//---------> edgedetection
 
 	if(bt_up^bt_up_tmp)		
 	{
@@ -151,9 +150,9 @@
 		bt_mode_tmp = bt_mode;
 	}
 	
-	// hosszu gombnyomás ellenõrzések: enter, up, down
+	// long button pressed: enter, up, down
 
-	if((bt_enter+bt_down+bt_up) == 2)	// ha 1 gomb van csak lenyomva
+	if((bt_enter+bt_down+bt_up) == 2)	// only one button has been pressed
 	{ 
 		if (!bt_enter)		 
 		{
@@ -171,38 +170,36 @@
 			if ((uint32_t)(current_time - prev_time_long)>= interval_long) down_long_f = 1; 
 		}
 	}
-	else	// gomb elengedve --> reset flag
+	else
 	{
 		enter_long_f = 0;	 
 		up_long_f = 0;
 		down_long_f = 0;
 	} 
 	
-	// menü + submenü switch --> hosszu --> belsejét függvényezni 
+	// menu
 
-	switch(menu_n)	// --> ha "ráléptem" az adott menüpontra 
+	switch(menu_n)
 	{
-	case 0:		// reset 
+	case 0:	
 				// reset();
-				// kilépés --> reset állítja a flaget 
+	
 				break;
 
 	case 1:		// DMX ADRESS
 				if(sub_menu_f)  				// SUBMENU 
 				{
-												// ENTER HOSSZAN  --> mentés
-					if(mode_f) sub_menu_f = 0;	// MODE	 --> kilépés --> menü
-					if(up_f) dmx_adress++;		// UP-DOWN -->  dmx adress
+					if(mode_f) sub_menu_f = 0;
+					if(up_f) dmx_adress++;
 					if(down_f) dmx_adress--;
-					// A betû villogtatás
+
 					if ((uint32_t)(current_time - prev_time_blink)>= interval_blink)
 					{
 						prev_time_blink = current_time;
 						dmx_menu_blink ^= 0x01;
 					}
-					// gyors léptetés
 
-					if (up_long_f)	//gyors léptetés up 
+					if (up_long_f)
 					{
 						if ((uint32_t)(current_time - prev_time_counter)>= interval_counter)
 						{
@@ -210,7 +207,7 @@
 							dmx_adress++;
 						}
 					}
-					if (down_long_f) //gyors léptetés down
+					if (down_long_f)
 					{
 						if ((uint32_t)(current_time - prev_time_counter)>= interval_counter)
 						{
@@ -219,11 +216,11 @@
 						}
 					}	    
 				}
-				else							// SIMA MENU		
+				else		
 				{
-												// MODE	 --> semmi
-					if(enter_f) sub_menu_f = 1;	// ENTER  --> belépés --> submenü
-					if(up_f) menu_n--;			// UP-DOWN -->  menu_n
+
+					if(enter_f) sub_menu_f = 1;	
+					if(up_f) menu_n--;	
 					if(down_f) menu_n++;
 
 					dmx_menu_blink = 0;
@@ -233,18 +230,16 @@
 
 	case 2:		// LAMP
 	
-				if(sub_menu_f)  				// SUBMENU
-				{
-												// ENTER  --> mentés, hoszan
-					if(mode_f) sub_menu_f = 0;	// MODE	 --> kilépés --> menü
-					if(up_f) sub_menu_n--;		// UP-DOWN -->  sub_menu_n,
+				if(sub_menu_f)  				
+				{					
+					if(mode_f) sub_menu_f = 0;	
+					if(up_f) sub_menu_n--;	
 					if(down_f) sub_menu_n++;
 				}
-				else							// SIMA MENU
+				else	
 				{				
-												// MODE	 --> semmi
-					if(enter_f) sub_menu_f = 1;	// ENTER  --> belépés --> submenü
-					if(up_f) menu_n--;			// UP-DOWN -->  menu_n
+					if(enter_f) sub_menu_f = 1;	
+					if(up_f) menu_n--;
 					if(down_f) menu_n++;
 				}
 				break;
@@ -264,23 +259,23 @@
 
 	push_string();
 								 
-	//save_enter
+	// save enter
 
-	if (sub_menu_f && enter_long_f)	   // submenübe van + enter long lenyomva  --> set save_f
+	if (sub_menu_f && enter_long_f)
 	{ 
 		save_f = 1;
 	}
 
-	if(save_f && !save_once)  // 1x fut le 
+	if(save_f && !save_once)
 	{
 		save_once = 1;
 
-		if(menu_n == 2)			// lámpa save
+		if(menu_n == 2)
 		{
 			if(sub_menu_n == 0) lamp_on_f = 1;		
 			else if (sub_menu_n == 1) lamp_on_f = 0;
 
-		}else if(menu_n == 1)	//adress save 
+		}else if(menu_n == 1)
 		{
 			eeprom_write_byte(EEPR_ADR_DMX_ARD_0, (uint8_t)dmx_adress);	
 			eeprom_write_byte(EEPR_ADR_DMX_ADR_1, (uint8_t)(dmx_adress >> 8));
@@ -334,9 +329,9 @@
 		}
 	}
 
-	/// relé idõ,eeprom, kiiratás kezelés
+	/// relay time measure
 
-	if (lamp_on_f && lamp_cold_f)	  // bekapcsolva és kihûlt  
+	if (lamp_on_f && lamp_cold_f)
 	{
 		lamp_cold_f = 0;	
 		relay_set();		
@@ -347,10 +342,10 @@
 			lcd_dot_buffer[i] = 0x01;
 		}
 
-	}else if (!lamp_on_f && !lamp_cold_f && !lamp_count)  // kikapcsolni és még meleg,
+	}else if (!lamp_on_f && !lamp_cold_f && !lamp_count)
 	{ 
 		relay_reset();
-		// számlálás indítása  	 --> ha letelt set lamp_cold f
+
 		prev_time_lamp_cold = current_time;
 		lamp_count = 1;
 		for (int i = 0; i<4;i++)
@@ -359,7 +354,7 @@
 		}
 	}
 
-	if (lamp_count) // lámpa idõzítés 
+	if (lamp_count) 
 	{
 		if ((uint32_t)(current_time - prev_time_lamp_cold)>= interval_lamp_cold)
 		{
@@ -378,14 +373,12 @@
 	lcd_init(4);	// 4x4 = 16ms refresh time 
 	relay_init();
 
-	// eeprom kiolvasás
 	lamp_cold_f = eeprom_read_byte(EEPR_ADR_LAMP);
 	dmx_adress = eeprom_read_byte(EEPR_ADR_DMX_ARD_0);
 	dmx_adress |= (eeprom_read_byte(EEPR_ADR_DMX_ADR_1)<<8);
 
 	dmx_adress_pointer = (dmx_array+(dmx_adress-1)+2);
-	// TÖRÖLD KI !!!! 
-	dmx_adress_pointer = dmx_array; // FIX ÉRTÉKRE ÁLLÍTÁS IDEIGLENESEN !!
+	dmx_adress_pointer = dmx_array; 
 
 
  }

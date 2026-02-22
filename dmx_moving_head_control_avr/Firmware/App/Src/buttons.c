@@ -38,8 +38,6 @@
  {
 	db_time = debounce_time;
 
-	// gomb pinek bemenet + pullup  - init
-
 	PORT_Init(&BTN_UP_DIR,BTN_UP_PIN,0);		// PC0 - input
 	PORT_Write(&BTN_UP_PORT,BTN_UP_PIN,1);		// P0 - pull up
 
@@ -64,13 +62,13 @@
 	static uint16_t interval_time = 0;
 
 	uint32_t current_time = millis();
-	interval_time = db_time;						//devounce time beállítása 
+	interval_time = db_time;									// set debounce time
 
-	if ((uint32_t)(current_time - prev_time)>= interval_time)  //pergés mentesítés
+	if ((uint32_t)(current_time - prev_time)>= interval_time)	// Debouncing
 	{
 		prev_time = current_time;
 
-		*button_0_p = ((buttons & 0x01) && 0x01);	//pointereknek gomb értékének átadása
+		*button_0_p = ((buttons & 0x01) && 0x01);
 		*button_1_p = ((buttons & 0x02) && 0x01);
 		*button_2_p = ((buttons & 0x04) && 0x01);
 		*button_3_p = ((buttons & 0x08) && 0x01);		

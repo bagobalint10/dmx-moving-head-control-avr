@@ -71,7 +71,7 @@
 
 	current_time = millis();
 
-	if ((uint32_t)(current_time - time_dmx_send)>= interval_dmx_send_0)		// fix 10ms-onként lefut 
+	if ((uint32_t)(current_time - time_dmx_send)>= interval_dmx_send_0)
 	{
 		time_dmx_send = current_time;
 		usart_transmit_poll(dmx_send_buffer[send_n]);	
@@ -83,7 +83,7 @@
 			send_n = DMX_START_ADRESS;
 			interval_dmx_send_0 = DMX_RESET_TIME;	
 
-			for (int i = 0; i<15; i++)					// buffr frissítése
+			for (int i = 0; i<15; i++)					// refresh buffer
 			{
 				dmx_send_buffer[i] = *(dmx_adress_pointer+i);
 			}

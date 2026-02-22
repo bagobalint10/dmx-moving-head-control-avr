@@ -11,14 +11,14 @@
 
  void eeprom_write_byte(unsigned int uiAddress, uint8_t ucData)
  {
-	while(EECR & (1<<EEPE));	// elõzõ írás kivárása 
+	while(EECR & (1<<EEPE));	// waiting for last write 
 
 	cli();
 
-	EEAR = uiAddress;			// adat + cím megadása 
+	EEAR = uiAddress;			// data + adress 
 	EEDR = ucData;
 	 
-	EECR |= (1<<EEMPE);			// adat beírása --> eeprom
+	EECR |= (1<<EEMPE);			// write data --> eeprom
 	EECR |= (1<<EEPE);
 		 
 	sei();
@@ -26,10 +26,10 @@
 
  uint8_t eeprom_read_byte(unsigned int uiAddress)
  {
-	 while(EECR & (1<<EEPE));	// elõzõ írás várása
+	 while(EECR & (1<<EEPE));	// wait for last read
 	 
-	 EEAR = uiAddress;			// cím megadása
-	 EECR |= (1<<EERE);			// adat kiolvasása ,  eeprom   --> EEDR
+	 EEAR = uiAddress;			// set adress
+	 EECR |= (1<<EERE);			// read data ,  eeprom   --> EEDR
 	 
 	 return EEDR;	
  }

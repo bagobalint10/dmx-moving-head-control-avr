@@ -6,11 +6,11 @@
  */ 
 
 
- ////// 1. CONTROL_BOARD modul 
+ ////// 1. CONTROL_BOARD module 
 
  static void lcd_button_test_code(void)
  {
-	// ideiglenes kijelzõ gomb test code
+	// test code for display + buttons 
 
 	#define TEST_BUTTONS valtozo_neve
 	 
@@ -26,7 +26,7 @@
 
  static void lcd_abcd_test_code(void)
  {
-	// ideiglenes kijelzõ abcd  test code
+	// test code for display (abcd)
 	  
 	segment_write_digit(0x01,'d', 0, 1);
 	_delay_ms(1);
@@ -38,7 +38,7 @@
 	_delay_ms(1);
  }
 
-	// timer millis minta kód 
+	// timer millis sample code
 	
 	static uint32_t tmp_current_time = 0;
 	tmp_current_time = millis();

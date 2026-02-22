@@ -16,17 +16,17 @@
 	static const uint8_t dot_mask = 0x01;  
 	uint8_t char_pixel = 0;
 
-	if(enable == 0)								// enable == 0  --> kijelzõ törlése
+	if(enable == 0)								// enable == 0  --> clear screen
 	{
 		char_i = 40;
 		char_pixel = character_table[char_i];	// ' '
 	}
-	else										// enable == 1  --> normál kiiratás
+	else										// enable == 1  --> normal write
 	{
 		char_pixel = character_table[char_i];
-		if (dot)								// dot == 1 --> pont maszkolás
+		if (dot)								// dot == 1 --> masking dots
 		{
-			char_pixel |= (dot_mask);			// karakter + pont
+			char_pixel |= (dot_mask);			// character + dot
 		}
 	}
 

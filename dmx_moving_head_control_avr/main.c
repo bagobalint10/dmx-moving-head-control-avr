@@ -32,7 +32,7 @@ static void tmp_timer(void)
 {
    static uint32_t tmp_current_time = 0;
    static uint32_t tmp_time_0 = 0;
-   static uint16_t tmp_interval_0 = 10000;	//10mp
+   static uint16_t tmp_interval_0 = 10000;	//10sec
 
    tmp_current_time = millis();
 
@@ -40,7 +40,7 @@ static void tmp_timer(void)
    {
 	   tmp_time_0 = tmp_current_time;
 	   
-	   if(dmx_pos) dmx_pos = 0;				// dmx pozíció változtatása
+	   if(dmx_pos) dmx_pos = 0;				// changing dmx position
 	   else  dmx_pos = 10000;
    }
 }
