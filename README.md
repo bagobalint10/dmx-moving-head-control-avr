@@ -33,9 +33,6 @@ A[DMX Moving Head Control - AVR ❌] --> B( MCU change,
 B -->|Base| C[DMX Moving Head - Base Control - STM32 ✔️]
 B -->|Head| D[DMX Moving Head - Head Control - STM32 ✔️]
 
-style A fill: #5e1a24
-style C fill: #1a465e
-style D fill: #1a425e
 
 ```
 
